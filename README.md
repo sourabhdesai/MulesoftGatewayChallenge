@@ -131,3 +131,6 @@ This app can be run by executing `node terminal_news.js`
 The stories are highlighted by their sentiment analysis. Positive articles are the greenish-yellow headlines, Negative articles are red, and Neutral articles are white. Each headline is enumerated by its trend rank to its left. To view the summary for a specific article, just type in that articles rank number and hit enter. To open a specific article in your browser, type `open <rank of article>`. If you want to open an article who's summary you are viewing, just type `open`. To go back to the list of articles, type `list`. To exit the application, type `exit` or `Ctrl + C`. There is also a help menu that can be accessed by typing `help`.
 
 All data is only loaded once. To get latest articles, you would need to restart the application.
+
+## Tests
+I have also included some basic tests for each of the API gateway endpoints. Each test checks if their were errors making the request, if the response received was an error response, or if their were any errors in the JSON parsing of the response. The sentiment analysis tests also check whether the sentiment analysis received by the API is consistent with previous runs of the sentiment analysis API for the same text(s). These also provide a clean, concise usage reference of the gateway API.
