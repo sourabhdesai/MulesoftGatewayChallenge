@@ -8,7 +8,7 @@ My implementation has been created with an eye on two key properties:
 - Modularity
 	- Each API in the gateway should be created separately
 - Extensibility
-	- Should have the ability add new APIs to the gateway minimal changes to any existing code
+	- Should have the ability add new APIs to the gateway with minimal changes to any existing code
 	
 ## Usage
 
@@ -120,7 +120,7 @@ Each API module is an instance of an `APIModule` object. This is a custom object
 I decided to add a usage logger to the server code so that one can examine the hit frequency for each of the endpoints. This is delivered in its own endpoint (`/usage/:api`). This functionality is given by the `UsageLogger` object. Each usage logger contains the hit count for the endpoints of a particular API. This data is also written to disk for backup. Every 20 seconds, if the hit counts have changed since the last write, the data is written in JSON format to the `usage_logs/` directory. That way, even if the server crashes, it can recover a somewhat consistent record of the API usage. Writing only periodically ensures fewer local IO operations but is a tradeoff for consistency in cases of failure recovery.
 
 ## Terminal News
-One of the reasons I chose the three APIs for my gateway was because I knew I could do something intersting with the combination of them. I decided to create a small terminal based Hacker News browser that provides summaries and sentiment analysis for the top 15 trending hacker news articles. After a short preliminary loading stage (where all the Gateway API calls are made), the application prints out a list of the story headlines like the following:
+One of the reasons I chose the three APIs for my gateway was because I knew I could do something interesting with the combination of them. I decided to create a small terminal based Hacker News browser that provides summaries and sentiment analysis for the top 15 trending hacker news articles. After a short preliminary loading stage (where all the Gateway API calls are made), the application prints out a list of the story headlines like the following:
 
 <img src="terminalnews_screenshot.png">
 
@@ -130,7 +130,7 @@ This app can be run by executing `node terminal_news.js`
 
 The stories are highlighted by their sentiment analysis. Positive articles are the greenish-yellow headlines, Negative articles are red, and Neutral articles are white. Each headline is enumerated by its trend rank to its left. To view the summary for a specific article, just type in that articles rank number and hit enter. To open a specific article in your browser, type `open <rank of article>`. If you want to open an article who's summary you are viewing, just type `open`. To go back to the list of articles, type `list`. To exit the application, type `exit` or `Ctrl + C`. There is also a help menu that can be accessed by typing `help`.
 
-All data is only loaded once. To get latest articles, you would need to restart the application.
+All data is only loaded once. To get latest articles, you would need to restart the application. It is also worth mentioning that this may or may not run properly on a machine running an OS other than Mac OS X. I have not tested it on Windows or Linux and am not entirely sure if the app will clear the console properly.
 
 ## Tests
 I have also included some basic tests for each of the API gateway endpoints. Each test checks if their were errors making the request, if the response received was an error response, or if their were any errors in the JSON parsing of the response. The sentiment analysis tests also check whether the sentiment analysis received by the API is consistent with previous runs of the sentiment analysis API for the same text(s). These also provide a clean, concise usage reference of the gateway API.

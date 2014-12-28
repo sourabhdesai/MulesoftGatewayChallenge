@@ -40,7 +40,8 @@ app.post("/nlptools/sentiment/batch", function(req, res) {
 app.get("/nlptools/summarize", function(req, res) {
 	if ("url" in req.query) {
 		var url = req.query.url;
-		res.redirect("http://clipped.me/algorithm/clippedapi.php?url=" + url);
+		var redirectURL = "http://clipped.me/algorithm/clippedapi.php?url=" + url; 
+		req.pipe(request(redirectURL)).pipe(res);
 	} else {
 		res.json({
 			"error": "Request url must contain parameter url=www.linktosometext.com"

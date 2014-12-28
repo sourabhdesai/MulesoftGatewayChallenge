@@ -1,4 +1,5 @@
 var APIModule = require("../../APIModule");
+var request   = require('request');
 
 var apiModule = new APIModule("hacker_news");
 
@@ -9,7 +10,7 @@ var usageLog = apiModule.usageLog;
 // Documentation is on github readme: https://github.com/HackerNews/API
 
 app.get("/hacker_news/top", function (req, res) {
-	res.redirect("https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty");
+	req.pipe(request("https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty")).pipe(res);
 	usageLog.logUse("top");
 });
 
@@ -17,7 +18,7 @@ app.get("/hacker_news/item/:itemID", function (req, res) {
 	if ("itemID" in req.params) {
 		var itemID = req.params.itemID;
 		var redirectURL = "https://hacker-news.firebaseio.com/v0/item/" + itemID + ".json?print=pretty";
-		res.redirect(redirectURL);
+		req.pipe(request(redirectURL)).pipe(res);
 	} else {
 		res.json({
 			"error":"Didn't specify itemID in request url"
@@ -30,7 +31,7 @@ app.get("/hacker_news/user/:username", function(req, res) {
 	if ("username" in req.params) {
 		var username = req.params.username;
 		var redirectURL = "https://hacker-news.firebaseio.com/v0/user/" + username + ".json?print=pretty";
-		res.redirect(redirectURL);
+		req.pipe(request(redirectURL)).pipe(res);
 	} else {
 		res.json({
 			"error":"Didn't specify username in request url"
