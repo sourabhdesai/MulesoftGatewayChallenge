@@ -1,5 +1,5 @@
 {
-	"summarize": 15,
+	"summarize": 30,
 	"single_sentiment": 1,
-	"batch_sentiment": 2
+	"batch_sentiment": 3
 }

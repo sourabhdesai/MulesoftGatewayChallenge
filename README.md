@@ -126,6 +126,8 @@ One of the reasons I chose the three APIs for my gateway was because I knew I co
 
 *NOTE: For this application to run properly, an instance of the Gateway server must be running locally on port 3000*
 
+This app can be run by executing `node terminal_news.js`
+
 The stories are highlighted by their sentiment analysis. Positive articles are the greenish-yellow headlines, Negative articles are red, and Neutral articles are white. Each headline is enumerated by its trend rank to its left. To view the summary for a specific article, just type in that articles rank number and hit enter. To open a specific article in your browser, type `open <rank of article>`. If you want to open an article who's summary you are viewing, just type `open`. To go back to the list of articles, type `list`. To exit the application, type `exit` or `Ctrl + C`. There is also a help menu that can be accessed by typing `help`.
 
 All data is only loaded once. To get latest articles, you would need to restart the application.
