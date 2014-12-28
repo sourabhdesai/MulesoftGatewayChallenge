@@ -14,11 +14,11 @@ My implementation has been created with an eye on two key properties:
 
 To run the app, you would just need to go into the root directory, and run `node app.js`, assuming you have node.js installed on your machine.
 
-There are 3 APIs that this gateway connects with. They are the [Hacker News API](https://github.com/HackerNews/API), [Clipped's Summarization API](http://www.clipped.me/api.html), and a [Sentiment Analysis API](http://sentiment.vivekn.com/docs/api/). These APIs were chosen because their lack of reliance on API keys, lack of hard set usage restrictions, and ease of use. In addition to these, there is also an endpoint to give usage frequency for each of the API endpoints.
+There are 3 APIs that this gateway connects with. They are the [Hacker News API](https://github.com/HackerNews/API), [Clipped's Summarization API](http://www.clipped.me/api.html), and a [Sentiment Analysis API](http://sentiment.vivekn.com/docs/api/). These APIs were chosen because their lack of reliance on API keys, lack of hard set usage restrictions, and ease of use. In addition to these, there is also an endpoint to give usage frequency for each of the API endpoints. Since this is a proxy gateway, the responses do not have a consistent format. The responses are of the format that is specified in the documentation for each of the APIs.
 
 These APIs can be accessed as follows
 
-### Hacker News API
+### Hacker News API Gateway
 
 - Top Stories
 	- `GET`
@@ -26,8 +26,65 @@ These APIs can be accessed as follows
 	- Response
 		- Retuns a JSON array of Numbers. Numbers correspond to item IDs for articles on Hacker News. Numbers are indexed by how they are trending on hacker news.
 
-- 
-	
+- Get Item
+	- `GET`
+	- `/hacker_news/item/:itemID`
+	- Response
+		- Success
+			- Returns JSON object containing info about item selected by itemID.
+		- Failure
+			- Returns JSON object with `"error"` attribute explaining details of error.
+
+- Get Username
+	- `GET`
+	- `/hacker_news/user/:username`
+	- Response
+		- Success
+			- Returns JSON object containing info about user selected by username
+		- Failure
+			- Returns JSON object with `"error"` attribute explaining details of error.
+
+### Clipped's Summarization API Gateway
+- Summarize Article
+	- `GET`
+	- `/nlptools/summarize?url=[link to textual content]`
+	- Response
+		- Success
+			- Returns JSON object containing `"summary"` attribute which holds an array of sentences from URL that summarizes the article at it.
+		- Failure
+			- Returns JSON object with `"error"` attribute explaining details of error.
+			- If error is from Clipped API, it will not return JSON object. Must put try-catch around JSON parser to catch this error.
+
+### Sentiment Analysis API Gateway
+- Sentiment Analysis of Single Paragraph
+	- `POST`
+	- `/nlptools/sentiment/single`
+	- Request
+		- Request body must contain JSON object with `"txt"` attribute that has the string of text to be analyzed
+	- Response
+		- Success
+			- Returns JSON object containing `"result"` attribute which holds another JSON object. `"result"` object contains  `"sentiment"` attribute which indicates the sentiment analysis of the paragraph ("Positive", "Neutral", "Negative"). `"result"` object also contains `"confidence"` attribute which indicates the confidence value of whether the sentiment analysis given is corrent (`Number` from 0-100).
+		- Failure
+			- Returns JSON object with `"error"` attribute explaining details of error. 
+
+- Sentiment Analysis of Batch of Paragraphs
+	- `POST`
+	- `/nlptools/sentiment/batch`
+	- Request
+		- Request body must contain JSON array of texts that need to be analyzed. 
+	- Response
+		- Success
+			- Returns array of JSON objects. Each JSON object contains sentiment analysis for text at corresponding index from request body's text array. Each JSON object contains `"sentiment"` attribute which indicates the sentiment analysis of the paragraph ("Positive", "Neutral", "Negative") and object also contains `"confidence"` attribute which indicates the confidence value of whether the sentiment analysis given is corrent (`Number` from 0-100).
+		- Failure
+			- Returns JSON object with `"error"` attribute explaining details of error.
+
+### Usage Hit Counts
+- Get API Hit Counts
+	- `GET`
+	- `/usage/:api`
+	- Response
+		- Returns JSON object with attributes corresponding to endpoints to that API, with their values being the hit count for each endpoint.
+
 ## Implementation Details
 I will discuss the implementation details by walking through what I did to acheive the two goals of modularity and extensibility.
 

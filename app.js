@@ -27,7 +27,7 @@ app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Add API Routes
-// Every API module for this gateway can be integrated by being added to the apiApps array
+// Every API module for this gateway can be integrated by being added to the apis array
 var apis = [hackerNews, nlpTools];
 apis.forEach(function(api) {
 	app.use(api.app);
